@@ -1,3 +1,6 @@
+twitter_auth.yml
+nike_auth.yml
+
 *.gem
 *.rbc
 .bundle
