@@ -1,5 +1,6 @@
-twitter_auth.yml
-nike_auth.yml
+twitter_creds.yml
+nike_creds.yml
+notes/
 
 *.gem
 *.rbc
