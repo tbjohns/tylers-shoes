@@ -6,9 +6,7 @@ module Shoes
 
 	def Shoes.get_tweet
 		info = Shoes.get_nike_info()
-		puts Shoes.cocky_brag info
 
-		return nil
 		if Shoes.new_info? info
 			return Shoes.cocky_brag info
 		else
@@ -33,6 +31,7 @@ module Shoes
 			info[:total_miles] = Float(total_distance) * km_to_miles
 
 			latest_run = me.activities(activity_type: "RUN").first
+			info[:latest_time] = latest_run.start_time
 			info[:latest_id] = latest_run.activity_id
 			metrics = latest_run.metric_summary
 			(hours, minutes, secs) = metrics["duration"].split(":")
@@ -43,13 +42,13 @@ module Shoes
 		end
 
 		def Shoes.new_info? info
-			true
+			return !Shoes.note_match("latest_run_id", info[:latest_id])
 		end
 
 		def Shoes.random_phrase type
 			f = File.open "phrases/#{type}.txt"
 			phrase_ar = []
-			f.each_line{ |l| phrase_ar.push l }
+			f.each_line{ |l| phrase_ar.push l.strip }
 			phrase_ar.sample
 		end
 
@@ -77,11 +76,52 @@ module Shoes
 			end
 		
 			hashtag = Shoes.random_phrase "positive_hashtags"
+
+			r = rand
 			return "#{base} #{hashtag}"
 		end
 
 		def Shoes.lazy_dis info
-			"Lazy man"
+			seconds_passed = (Time.now - Time.parse(info[:latest_time]))
+			days_passed = Integer(seconds_passed/24/60/60)
+
+			description = "Been a "
+			if days_passed < 7
+				Shoes.note_match("last_dig", days_passed) # reset note file
+				return nil
+			elsif days_passed == 7
+				return nil if Shoes.note_match("last_dig", days_passed)	
+				description += "week"
+			elsif days_passed == 30
+				return nil if Shoes.note_match("last_dig", days_passed)	
+				description += "month"
+			elsif days_passed == 365
+				return nil if Shoes.note_match("last_dig", days_passed)	
+				description += "year"
+			else
+				return nil
+			end
+			description += " since the last run."
+		
+			comment = Shoes.random_phrase "negative_comments"
+			hashtag = Shoes.random_phrase "negative_hashtags"
+			return "#{description} #{comment} #{hashtag}"
+		end
+
+		def Shoes.note_match name, contents
+			contents = contents.to_s()
+			path = "notes/#{name}"
+			if File.exists? path
+				f = File.open path
+				if f.read == contents
+					return true
+				end
+			end
+
+			f = File.open path, "w"
+			f.write contents
+			f.close()
+			return false
 		end
 
 end
