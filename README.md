@@ -1,10 +1,9 @@
-@TylersShoes
-============
+== @TylersShoes
 
-This bot updates a Twitter account for my running shoes.
-The bot monitors my Nike+ stats via Nike's developer API
-and sends out tweets with appropriate amounts of
-encouragement/trash talk.
+This bot controls a Twitter account for my running shoes.
+The bot monitors Nike+ stats via Nike's developer API
+and tweets corresponding
+encouragement and/or trash talk.
 
 Follow my shoes at http://twitter.com/tylersshoes!
 
