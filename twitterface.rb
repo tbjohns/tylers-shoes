@@ -4,7 +4,8 @@ require "yaml"
 
 module Twitterface 
 
-	twitter_creds = YAML.load_file("config/twitter_creds.yml")
+	creds_path = File.expand_path("../config/twitter_creds.yml", __FILE__)
+	twitter_creds = YAML.load_file(creds_path)
 
 	client = Twitter.configure do |config|
 		config.consumer_key = twitter_creds[:consumer_key]

@@ -1,6 +1,6 @@
 require "rubygems"
-require "nike_v2"
 require "yaml"
+require "nike_v2"
 
 module Shoes
 
@@ -17,7 +17,8 @@ module Shoes
 	private
 
 		def Shoes.get_nike_info
-			nike_creds = YAML.load_file("config/nike_creds.yml")
+			creds_path = File.expand_path("../config/nike_creds.yml", __FILE__)
+			nike_creds = YAML.load_file(creds_path)
 			me = NikeV2::Person.new(access_token: nike_creds[:access_token])
 			me.summary.running
 
@@ -110,7 +111,7 @@ module Shoes
 
 		def Shoes.note_match name, contents
 			contents = contents.to_s()
-			path = "notes/#{name}"
+			path = File.expand_path("../notes/#{name}", __FILE__)
 			if File.exists? path
 				f = File.open path
 				if f.read == contents

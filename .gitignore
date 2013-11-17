@@ -1,6 +1,8 @@
 twitter_creds.yml
 nike_creds.yml
 notes/
+*.plist
+run_bot.sh
 
 *.gem
 *.rbc
